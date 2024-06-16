@@ -15,15 +15,15 @@
 
 ### VPC1
   ```
-  VPCS> ip 10.0.10.1/24 10.0.10.254
+  VPCS> ip 10.0.10.1/24 10.0.10.100
   Checking for duplicate address...
-  VPCS : 10.0.10.1 255.255.255.0 gateway 10.0.10.254
+  VPCS : 10.0.10.1 255.255.255.0 gateway 10.0.10.100
   ```
 ### VPC2
   ```
-  VPCS> ip 10.0.20.1/24 10.0.20.254
+  VPCS> ip 10.0.20.1/24 10.0.20.100
   Checking for duplicate address...
-  VPCS : 10.0.20.1 255.255.255.0 gateway 10.0.20.254
+  VPCS : 10.0.20.1 255.255.255.0 gateway 10.0.20.100
   ```
   
 ### Switch2
@@ -34,11 +34,11 @@
   Switch(config-vlan)#exit
   Switch(config)#vlan 20
   Switch(config-vlan)#exit
-  Switch(config)#interface Gi0/0
+  Switch(config)#interface Gi0/1
   Switch(config-if)#switchport mode access
   Switch(config-if)#switchport access vlan 10
   Switch(config-if)#exit
-  Switch(config)#interface Gi0/1
+  Switch(config)#interface Gi0/0
   Switch(config-if)#switchport trunk encapsulation dot1q
   Switch(config-if)#switchport mode trunk
   Switch(config-if)#switchport trunk allowed vlan 10,20
@@ -53,11 +53,11 @@
 
 ### Switch3
 
-Аналогично настраиваем `Switch3`, с той лишь разницей, что подключаем `VPS1` по порту `Gi0/0` к `vlan20.
+Аналогично настраиваем `Switch3`, с той лишь разницей, что подключаем `VPS1` по порту `Gi0/1` к `vlan20.
 
 ### Switch1
 
-Настраиваем все порты `Switch 1` аналогично порту `Gi0/1` устройства `Switch 2`, после чего выполняем следующее:
+Настраиваем все порты `Switch 1` аналогично порту `Gi0/0` устройства `Switch 2`, после чего выполняем следующее:
 
 ```
 Switch(config)#spanning-tree mode pvst
@@ -76,11 +76,11 @@ Switch(config)#spanning-tree vlan 10,20 priority 0
   Router(config)#exit
   Router(config)#interface Gi0/0.10
   Router(config-subif)#encapsulation dot1q 10
-  Router(config-subif)#ip address 10.0.10.254 255.255.255.0
+  Router(config-subif)#ip address 10.0.10.100 255.255.255.0
   Router(config-subif)#exit
   Router(config)#interface Gi0/0.20
   Router(config-subif)#encapsulation dot1q 20
-  Router(config-subif)#ip address 10.0.20.254 255.255.255.0
+  Router(config-subif)#ip address 10.0.20.100 255.255.255.0
   Router(config-subif)#exit
   Router(config)#exit
   ```
